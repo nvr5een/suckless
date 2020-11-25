@@ -1,6 +1,6 @@
 # suckless
 
-Configuration files for suckless software used on Arch Linux. Outdated.
+Configuration files for suckless software used on Arch Linux.
 
 + [dwm](https://dwm.suckless.org/)
 + [slstatus](https://github.com/drkhsh/slstatus)
