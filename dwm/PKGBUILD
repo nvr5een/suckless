@@ -1,0 +1,60 @@
+pkgname=dwm
+pkgver=6.2
+pkgrel=5
+pkgdesc="A dynamic window manager for X"
+url="http://dwm.suckless.org"
+arch=('i686' 'x86_64')
+license=('MIT')
+options=(zipman)
+depends=('libx11' 'libxinerama' 'libxft' 'freetype2' 'st' 'dmenu' 'feh')
+install=dwm.install
+source=(http://dl.suckless.org/dwm/dwm-$pkgver.tar.gz
+        config.h
+        dwm.desktop
+        gaplessgrid.c
+        push.c
+        togglefullscreen.c)
+        _patches=(01-dwm-systray.diff
+                  02-dwm-center.diff
+                  03-dwm-scratchpad.diff
+                  04-dwm-ru_gaps.diff
+                  05-dwm-ru_bottomstack.diff)
+        source=(${source[@]} ${_patches[@]})
+sha256sums=('97902e2e007aaeaa3c6e3bed1f81785b817b7413947f1db1d3b62b8da4cd110e'
+            'SKIP'
+            'bc36426772e1471d6dd8c8aed91f288e16949e3463a9933fee6390ee0ccd3f81'
+            '118379efee86338375133095faa4ed593adeb9b4ca91b6a407478a27007eff7a'
+            '8ac821fd6df22734e7c269727eec665aa4637165d599e14984b8efe62517c9ba'
+            '1c233c6d82226cfa74e4d9304e68748e066ad6215853ba13fd9dd883281a3ce9'
+            'd880947fe3ec9cb5f649ee03d8625b29ade489f9c914a3fe2613f565666d27fb'
+            'b85174cee5acc66ee20b33edc07c4ac67e9fd9191cab6ef82573df6f61ab4b1f'
+            '47f716055330c1a0e9266acd9acc7b93a6ae01116883187d7036ee02098fc486'
+            '58a49e5c4d791bcd2082a734dd8c1191680456982497b250f44d93272a350b75'
+            '7071d74eaf96d282dec11e76a02f10e8b1cf24d1867933a9b690df481f7196bd')
+
+prepare() {
+  cd $srcdir/$pkgname-$pkgver
+
+  for p in "${_patches[@]}"; do
+    echo "=> $p"
+    patch < $srcdir/$p || return 1
+  done
+
+  cp $srcdir/config.h config.h
+  cp $srcdir/gaplessgrid.c gaplessgrid.c
+  cp $srcdir/push.c push.c
+  cp $srcdir/togglefullscreen.c togglefullscreen.c
+}
+
+build() {
+  cd $srcdir/$pkgname-$pkgver
+  make X11INC=/usr/include/X11 X11LIB=/usr/lib/X11 FREETYPEINC=/usr/include/freetype2
+}
+
+package() {
+  cd $srcdir/$pkgname-$pkgver
+  make PREFIX=/usr DESTDIR=$pkgdir install
+  install -m644 -D LICENSE $pkgdir/usr/share/licenses/$pkgname/LICENSE
+  install -m644 -D README $pkgdir/usr/share/doc/$pkgname/README
+  install -m644 -D $srcdir/dwm.desktop $pkgdir/usr/share/xsessions/dwm.desktop
+}

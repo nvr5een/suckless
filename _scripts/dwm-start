@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+feh --bg-tile ~/projects/suckless/dwm/tile.png
+slstatus &
+
+while true; do
+  dwm >/dev/null 2>&1
+done

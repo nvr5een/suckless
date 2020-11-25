@@ -1,0 +1,11 @@
+--- x.c.orig	2019-02-12 13:57:53.873040450 -0700
++++ x.c	2019-02-12 14:04:30.776360181 -0700
+@@ -632,6 +632,8 @@
+ 	XSetSelectionOwner(xw.dpy, XA_PRIMARY, xw.win, t);
+ 	if (XGetSelectionOwner(xw.dpy, XA_PRIMARY) != xw.win)
+ 		selclear();
++
++	clipcopy(NULL);
+ }
+ 
+ void

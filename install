@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+src=~/projects/suckless
+timestamp=$(date +%Y-%m-%d_%H:%M:%S)
+log_file=/tmp/suckless.log
+
+log_header() {
+  echo "-------------------" >> "$log_file"
+  echo "$timestamp" >> "$log_file"
+  echo "-------------------" >> "$log_file"
+}
+
+install_user_scripts() {
+  local dst=~/.local/bin
+  echo "Installing user scripts..." >> "$log_file"
+  mkdir -p "$dst"
+  for file in "$src"/_scripts/*; do
+    cp -fv "$file" "$dst" >> "$log_file"
+  done
+  chmod 700 "$dst"/*
+} 
+
+install_suckless_packages() {
+  local pkg=(st dwm slstatus)
+  for i in "${pkg[@]}"; do
+    echo "Installing $i..." >> "$log_file"
+    cd "$src"/"$i" || exit
+    makepkg -fsic --needed --noconfirm | tee -a "$log_file"
+  done
+}
+
+main() {
+  log_header
+  install_user_scripts
+  install_suckless_packages
+}
+
+main "$@"

@@ -1,0 +1,45 @@
+pkgname=st
+pkgver=0.8.2
+pkgrel=12
+pkgdesc='A simple virtual terminal emulator for X.'
+arch=('i686' 'x86_64' 'armv7h')
+license=('MIT')
+depends=(libxft)
+url=https://st.suckless.org
+source=(https://dl.suckless.org/$pkgname/$pkgname-$pkgver.tar.gz
+        config.h)
+        _patches=(01-alpha.diff
+                  02-clipboard.diff)
+        source=(${source[@]} ${_patches[@]})
+sha256sums=('aeb74e10aa11ed364e1bcc635a81a523119093e63befd2f231f8b0705b15bf35'
+            'SKIP'
+            'f57e07ceebd1992924370d58fb0284592566f28817d6eaf673bbb23db8c6eafd'
+            '6680beeae4fa0413270db9dc8eb903b4ba08611fc75b375b86148ca773fbd312')
+_sourcedir=$pkgname-$pkgver
+_makeopts="--directory=$_sourcedir"
+
+prepare() {
+  for p in "${_patches[@]}"; do
+    echo "=> $p"
+    patch --directory="$_sourcedir" --strip=0 < $p || return 1
+  done
+
+  if [ -e "$BUILDDIR/config.h" ];then
+    cp "$BUILDDIR/config.h" "$_sourcedir"
+  fi
+}
+
+build() {
+  make $_makeopts X11INC=/usr/include/X11 X11LIB=/usr/lib/X11
+}
+
+package() {
+  local installopts='--mode 0644 -D --target-directory'
+  local shrdir="$pkgdir/usr/share"
+  local licdir="$shrdir/licenses/$pkgname"
+  local docdir="$shrdir/doc/$pkgname"
+  make $_makeopts PREFIX=/usr DESTDIR="$pkgdir" install
+  install $installopts "$licdir" "$_sourcedir/LICENSE"
+  install $installopts "$docdir" "$_sourcedir/README"
+  install $installopts "$shrdir/$pkgname" "$_sourcedir/st.info"
+}
