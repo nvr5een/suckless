@@ -12,8 +12,7 @@ install_user_scripts() {
 } 
 
 install_suckless_packages() {
-  local pkg=(st dwm slstatus) # order matters
-  for i in "${pkg[@]}"; do
+  for i in st dwm slstatus; do # order matters
     cd "$src"/"$i" || exit
     makepkg -fsic --needed --noconfirm
   done
