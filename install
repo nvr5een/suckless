@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-src=~/projects/suckless
+src=~/.config/suckless
 
 install_user_scripts() {
   local dst=~/.local/bin
   mkdir -p "$dst"
-  for file in "$src"/_scripts/*; do
+  for file in "$src"/bin/*; do
     cp -fv "$file" "$dst"
   done
   chmod 700 "$dst"/*

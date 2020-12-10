@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-feh --bg-tile ~/projects/suckless/dwm/tile.png
+feh --bg-tile ~/.config/suckless/dwm/wall.png
 slstatus &
 
 while true; do

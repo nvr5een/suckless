@@ -9,7 +9,7 @@ Configuration files for suckless software used on Arch Linux.
 ## Installation
 
 ```
-$ mkdir -pv ~/projects
-$ git clone https://github.com/nvr5een/suckless.git ~/projects/suckless
-$ ~/projects/suckless/install
+$ mkdir -p ~/.config
+$ git clone https://github.com/nvr5een/suckless.git ~/.config/suckless
+$ ~/.config/suckless/install
 ```
