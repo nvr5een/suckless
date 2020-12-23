@@ -1,14 +1,14 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-src=~/.config/suckless
+src="$PWD"
+dst=~/.local/bin
 
 install_user_scripts() {
-  local dst=~/.local/bin
   mkdir -p "$dst"
-  for file in "$src"/bin/*; do
-    cp -fv "$file" "$dst"
+  for i in dmenu_bind dwm-start dwm-xprop; do
+    cp -fv "$src"/bin/"$i" "$dst"
+    chmod 700 "$dst"/"$i"
   done
-  chmod 700 "$dst"/*
 } 
 
 install_suckless_packages() {
